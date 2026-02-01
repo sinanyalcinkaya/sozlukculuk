@@ -1,0 +1,51 @@
+pdf_sayfa	cumle_id	token	lemma	anlam	etiket	cumle
+2	1	Duvarın	duvar	duvarın üstü		Duvarın dibinde resmim aldılar,ak kağıt üstünde tanıyın beni ..
+2	1	dibinde	dib	ayakta duran yer		Duvarın dibinde resmim aldılar,ak kağıt üstünde tanıyın beni ..
+2	1	resmim	resim	görsel sanat eseri		Duvarın dibinde resmim aldılar,ak kağıt üstünde tanıyın beni ..
+2	1	aldılar	al-	elde etmek, almak		Duvarın dibinde resmim aldılar,ak kağıt üstünde tanıyın beni ..
+2	1	ak	ak	beyaz renk		Duvarın dibinde resmim aldılar,ak kağıt üstünde tanıyın beni ..
+2	1	kağıt	kağıt	kağıt malzeme		Duvarın dibinde resmim aldılar,ak kağıt üstünde tanıyın beni ..
+2	1	üstünde	üst	yukarı kısım		Duvarın dibinde resmim aldılar,ak kağıt üstünde tanıyın beni ..
+2	1	tanıyın	tanı-	tanımak, fark etmek		Duvarın dibinde resmim aldılar,ak kağıt üstünde tanıyın beni ..
+2	2	Toros	Toros	dağlar	YER	Toros dağlarının etekleri ta Akdenizden başlar.
+2	2	dağlarının	dağ	yüksek yer		Toros dağlarının etekleri ta Akdenizden başlar.
+2	2	etekleri	etek	taban kısmı		Toros dağlarının etekleri ta Akdenizden başlar.
+2	2	Akdenizden	Akdeniz	deniz	YER	Toros dağlarının etekleri ta Akdenizden başlar.
+2	2	başlar	başla-	ilk olmak		Toros dağlarının etekleri ta Akdenizden başlar.
+2	3	Kıyıları	kıyı	deniz kenarı		Kıyıları döven ak köpüklerden sonra doruklara doğru yavaş yavaş yükselir.
+2	3	döven	döv-	vurmak, çarpmak		Kıyıları döven ak köpüklerden sonra doruklara doğru yavaş yavaş yükselir.
+2	3	ak	ak	suya benzer renk		Kıyıları döven ak köpüklerden sonra doruklara doğru yavaş yavaş yükselir.
+2	3	köpüklerden	köpük	suya karışan hava kabarcığı		Kıyıları döven ak köpüklerden sonra doruklara doğru yavaş yavaş yükselir.
+2	3	doruklara	doruk	dağın en yüksek noktası		Kıyıları döven ak köpüklerden sonra doruklara doğru yavaş yavaş yükselir.
+2	3	yavaş	yavaş	hızı az olan		Kıyıları döven ak köpüklerden sonra doruklara doğru yavaş yavaş yükselir.
+2	3	yavaş	yavaş	hızı az olan		Kıyıları döven ak köpüklerden sonra doruklara doğru yavaş yavaş yükselir.
+2	3	yükselir	yüksel-	yukarı doğru çıkmak		Kıyıları döven ak köpüklerden sonra doruklara doğru yavaş yavaş yükselir.
+2	4	Akdenizin	Akdeniz	deniz bölgesi	YER	Akdenizin üstünde daima, top top ak bulutlar salınır.
+2	4	üstünde	üst	yukarı kısım		Akdenizin üstünde daima, top top ak bulutlar salınır.
+2	4	daima	daima	her zaman		Akdenizin üstünde daima, top top ak bulutlar salınır.
+2	4	top top	top top	yavaşça, hafifçe hareket etme	ÇKY	Akdenizin üstünde daima, top top ak bulutlar salınır.
+2	4	ak	ak	beyaz renk		Akdenizin üstünde daima, top top ak bulutlar salınır.
+2	4	bulutlar	bulut	havada toplanmış su buharı		Akdenizin üstünde daima, top top ak bulutlar salınır.
+2	4	salınır	sal-	yayılmak, dağılmak		Akdenizin üstünde daima, top top ak bulutlar salınır.
+2	5	Kıyılar	kıyı	deniz kenarı		Kıyılar dümdüz, cilalanmış gibi düz kjlli topraklardır.
+2	5	dümdüz	dümdüz	tam düz, eğim yok	ÇKY	Kıyılar dümdüz, cilalanmış gibi düz kjlli topraklardır.
+2	5	cilalanmış	cilal-	parlatılmış, pırıl pırıl		Kıyılar dümdüz, cilalanmış gibi düz kjlli topraklardır.
+2	5	düz	düz	eğimli olmayan		Kıyılar dümdüz, cilalanmış gibi düz kjlli topraklardır.
+2	5	kjlli	kjlli	yazım hatası veya yerel ifade	AĞZ	Kıyılar dümdüz, cilalanmış gibi düz kjlli topraklardır.
+2	5	topraklardır	toprak	yeryüzü katı tabakası		Kıyılar dümdüz, cilalanmış gibi düz kjlli topraklardır.
+2	6	Killi	Killi	dağ, bölge adı	YER	Killi toprak et gibidir.
+2	6	toprak	toprak	yeryüzü katı		Killi toprak et gibidir.
+2	6	et	et	hayvanın eti		Killi toprak et gibidir.
+2	7	kıyılar	kıyı	denizle kara arasındaki sınır		Bu kıyılar saatlarca içe kadar deniz kokar, tuz kokar.
+2	7	saatlarca	saat	zaman birimi		Bu kıyılar saatlarca içe kadar deniz kokar, tuz kokar.
+2	7	içe	iç	dışın tersi		Bu kıyılar saatlarca içe kadar deniz kokar, tuz kokar.
+2	7	deniz	deniz	geniş su birikintisi		Bu kıyılar saatlarca içe kadar deniz kokar, tuz kokar.
+2	7	kokar	kok-	koku yaymak		Bu kıyılar saatlarca içe kadar deniz kokar, tuz kokar.
+2	7	tuz	tuz	deniz suyunun tuzlu olması		Bu kıyılar saatlarca içe kadar deniz kokar, tuz kokar.
+2	8	Düz	düz	yüzeyin düz olması		Düz, killi, sürülmüş topraklardan sonra Çukuro-vanm bükleri başlar.
+2	8	killi	killi	kılıç gibi keskin	AĞZ	Düz, killi, sürülmüş topraklardan sonra Çukuro-vanm bükleri başlar.
+2	8	sürülmüş	sür-	bir şeyi çekerek hareket ettirmek		Düz, killi, sürülmüş topraklardan sonra Çukuro-vanm bükleri başlar.
+2	8	topraklardan	toprak	yeryüzü katı		Düz, killi, sürülmüş topraklardan sonra Çukuro-vanm bükleri başlar.
+2	8	Çukuro-vanm	Çukuro-van	Türkiye'nin güneydoğusundaki bölge	YER	Düz, killi, sürülmüş topraklardan sonra Çukuro-vanm bükleri başlar.
+2	8	bükleri	bük	eğri, kıvrık yer		Düz, killi, sürülmüş topraklardan sonra Çukuro-vanm bükleri başlar.
+2	9	örülmüşçesine	örülmüşçesine	dokunmuş gibi, sıkışık	AĞZ,ÇKY	Örülmüşçesine sık çalılar, kamışlar, böğürtlenler, 
