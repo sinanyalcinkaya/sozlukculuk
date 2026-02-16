@@ -5,615 +5,518 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>İnce Memed — Lemma Gezgini</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
-
-:root {
-  --bg: #faf8f5;
-  --fg: #2c2416;
-  --accent: #8b4513;
-  --accent2: #c4713b;
-  --muted: #8a7e6f;
-  --border: #ddd5c8;
-  --card: #fff;
-  --highlight: #fff3cd;
-  --tag-bg: #f0e8db;
-  --shadow: rgba(44,36,22,0.08);
-}
-
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  font-family: 'Crimson Pro', Georgia, serif;
-  background: var(--bg);
-  color: var(--fg);
-  line-height: 1.6;
-  min-height: 100vh;
-}
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap');
+:root{--bg:#faf8f5;--fg:#2c2416;--ac:#8b4513;--ac2:#c4713b;--mu:#8a7e6f;--bd:#ddd5c8;--cd:#fff;--hl:#fff3cd;--tg:#f0e8db;--sh:rgba(44,36,22,.08);--err:#c0392b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--fg);line-height:1.6}
 
 /* Header */
-header {
-  background: var(--fg);
-  color: var(--bg);
-  padding: 1.5rem 2rem;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-header h1 {
-  font-size: 1.6rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-}
-
-header h1 span { color: var(--accent2); }
-
-/* Tabs */
-.tabs {
-  display: flex;
-  gap: 0;
-  margin-left: auto;
-}
-
-.tab {
-  padding: 0.5rem 1.2rem;
-  cursor: pointer;
-  border: 1px solid var(--muted);
-  background: transparent;
-  color: var(--bg);
-  font-family: inherit;
-  font-size: 0.95rem;
-  transition: all 0.2s;
-}
-
-.tab:first-child { border-radius: 4px 0 0 4px; }
-.tab:last-child { border-radius: 0 4px 4px 0; }
-.tab.active { background: var(--accent2); border-color: var(--accent2); font-weight: 600; }
-.tab:hover:not(.active) { background: rgba(255,255,255,0.1); }
+header{background:var(--fg);color:var(--bg);padding:.8rem 1.2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+header h1{font-size:1.3rem;font-weight:600;white-space:nowrap}
+header h1 span{color:var(--ac2)}
+.tabs{display:flex}.tab{padding:.35rem .9rem;cursor:pointer;border:1px solid var(--mu);background:0;color:var(--bg);font-family:inherit;font-size:.85rem;transition:.2s}
+.tab:first-child{border-radius:4px 0 0 4px}.tab:last-child{border-radius:0 4px 4px 0}
+.tab.act{background:var(--ac2);border-color:var(--ac2);font-weight:600}
 
 /* Search */
-.search-box {
-  display: flex;
-  gap: 0.5rem;
-  flex-grow: 1;
-  max-width: 400px;
-}
+.sbox{display:flex;gap:.3rem;flex-grow:1;max-width:420px}
+.sbox input{flex:1;padding:.35rem .6rem;border:1px solid var(--mu);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.82rem;background:rgba(255,255,255,.1);color:var(--bg);outline:0}
+.sbox input::placeholder{color:var(--mu)}.sbox input:focus{border-color:var(--ac2)}
+.sbox button{padding:.35rem .7rem;background:var(--ac2);color:#fff;border:0;border-radius:4px;cursor:pointer;font-size:.82rem;font-family:inherit}
+.sbox .rx{padding:.35rem .5rem;background:transparent;color:var(--mu);border:1px solid var(--mu);border-radius:4px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:.75rem}
+.sbox .rx.on{background:var(--ac2);color:#fff;border-color:var(--ac2)}
 
-.search-box input {
-  flex: 1;
-  padding: 0.5rem 0.8rem;
-  border: 1px solid var(--muted);
-  border-radius: 4px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.9rem;
-  background: rgba(255,255,255,0.1);
-  color: var(--bg);
-  outline: none;
-}
+/* Controls */
+.ctr{display:flex;align-items:center;gap:.8rem;color:var(--mu);font-size:.75rem;flex-wrap:wrap}
+.ctr input[type=range]{width:60px;accent-color:var(--ac2)}
+.mode-btn{padding:.2rem .5rem;border:1px solid var(--mu);border-radius:3px;cursor:pointer;font-size:.72rem;background:0;color:var(--mu)}
+.mode-btn.act{background:var(--ac2);color:#fff;border-color:var(--ac2)}
 
-.search-box input::placeholder { color: var(--muted); }
-.search-box input:focus { border-color: var(--accent2); }
+/* Breadcrumb */
+.bread{padding:.5rem 1.2rem;background:var(--cd);border-bottom:1px solid var(--bd);font-size:.85rem;display:flex;align-items:center;gap:.3rem;flex-wrap:wrap}
+.bread a{color:var(--ac);cursor:pointer;text-decoration:none;font-weight:600}
+.bread a:hover{text-decoration:underline}
+.bread .sep{color:var(--mu)}
 
-/* Context slider */
-.ctx-control {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
+/* Info bar */
+.info{padding:.35rem 1.2rem;font-size:.75rem;color:var(--mu);background:var(--cd);border-bottom:1px solid var(--bd);display:flex;gap:2rem}
+.info b{color:var(--ac);font-family:'JetBrains Mono',monospace}
 
-.ctx-control input[type=range] { width: 80px; accent-color: var(--accent2); }
+/* Letter grid */
+.lgrid{display:flex;flex-wrap:wrap;gap:3px;padding:.6rem 1.2rem;background:var(--cd);border-bottom:1px solid var(--bd)}
+.lbtn{min-width:36px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid var(--bd);border-radius:3px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600;background:var(--bg);color:var(--fg);transition:.15s;padding:0 .4rem}
+.lbtn:hover{background:var(--ac2);color:#fff;border-color:var(--ac2)}
+.lbtn.act{background:var(--ac);color:#fff;border-color:var(--ac)}
+.lbtn .n{font-size:.6rem;color:var(--mu);margin-left:.2rem}
+.lbtn.act .n{color:rgba(255,255,255,.7)}
+.lbtn.err{border-color:var(--err);color:var(--err)}
+.lbtn.err.act{background:var(--err);color:#fff}
 
-/* Letter nav */
-.letter-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  padding: 0.8rem 2rem;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-}
+main{max-width:1100px;margin:0 auto;padding:1rem 1.2rem}
 
-.letter-btn {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  cursor: pointer;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  font-weight: 600;
-  background: var(--bg);
-  color: var(--fg);
-  transition: all 0.15s;
-}
+.loading{text-align:center;padding:2rem;color:var(--mu);font-style:italic}
+.loading::after{content:'';display:inline-block;width:16px;height:16px;border:2px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:sp .7s linear infinite;margin-left:.4rem;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
 
-.letter-btn:hover { background: var(--accent2); color: #fff; border-color: var(--accent2); }
-.letter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-.letter-btn .count {
-  display: none;
-}
+/* Card */
+.card{margin-bottom:.8rem;border:1px solid var(--bd);border-radius:5px;background:var(--cd);box-shadow:0 1px 2px var(--sh);overflow:hidden}
+.ch{padding:.5rem .7rem;background:var(--tg);cursor:pointer;display:flex;align-items:center;gap:.4rem;user-select:none}
+.ch:hover{background:var(--bd)}
+.ar{font-size:.6rem;transition:transform .2s;color:var(--mu)}.op>.ar{transform:rotate(90deg)}
+.cn{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.95rem;color:var(--ac)}
+.cm{font-size:.72rem;color:var(--mu);margin-left:auto;font-family:'JetBrains Mono',monospace}
+.cb{display:none;padding:0 .7rem .5rem}.cb.op{display:block}
 
-/* Main content */
-main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1.5rem 2rem;
-}
-
-/* Loading */
-.loading {
-  text-align: center;
-  padding: 3rem;
-  color: var(--muted);
-  font-style: italic;
-}
-
-.loading::after {
-  content: '';
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-left: 0.5rem;
-  vertical-align: middle;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* Lemma tree */
-.lemma-group {
-  margin-bottom: 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--card);
-  box-shadow: 0 1px 3px var(--shadow);
-  overflow: hidden;
-}
-
-.lemma-header {
-  padding: 0.7rem 1rem;
-  background: var(--tag-bg);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  user-select: none;
-}
-
-.lemma-header:hover { background: var(--border); }
-
-.lemma-header .arrow {
-  font-size: 0.7rem;
-  transition: transform 0.2s;
-  color: var(--muted);
-}
-
-.lemma-header.open .arrow { transform: rotate(90deg); }
-
-.lemma-name {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: var(--accent);
-}
-
-.lemma-meta {
-  font-size: 0.8rem;
-  color: var(--muted);
-  margin-left: auto;
-}
-
-.lemma-body {
-  display: none;
-  padding: 0 1rem 0.8rem;
-}
-
-.lemma-body.open { display: block; }
-
-/* Form level */
-.form-group { margin-top: 0.6rem; }
-
-.form-header {
-  padding: 0.3rem 0.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  border-radius: 3px;
-  font-size: 0.95rem;
-}
-
-.form-header:hover { background: var(--bg); }
-.form-header .arrow { font-size: 0.6rem; color: var(--muted); transition: transform 0.2s; }
-.form-header.open .arrow { transform: rotate(90deg); }
-
-.form-name {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  color: var(--fg);
-}
-
-.form-count {
-  font-size: 0.75rem;
-  color: var(--muted);
-  background: var(--tag-bg);
-  padding: 0.1rem 0.4rem;
-  border-radius: 3px;
-}
-
-.form-body {
-  display: none;
-  padding-left: 1.5rem;
-}
-
-.form-body.open { display: block; }
+/* Form sub */
+.fg{margin-top:.4rem}
+.fh{padding:.2rem .35rem;cursor:pointer;display:flex;align-items:center;gap:.3rem;border-radius:3px;font-size:.88rem}
+.fh:hover{background:var(--bg)}
+.fh .ar{font-size:.5rem}
+.fn{font-family:'JetBrains Mono',monospace;font-weight:600}
+.fc{font-size:.68rem;color:var(--mu);background:var(--tg);padding:.05rem .3rem;border-radius:3px}
+.fb{display:none;padding-left:1.2rem}.fb.op{display:block}
 
 /* Context line */
-.ctx-line {
-  padding: 0.25rem 0;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  border-bottom: 1px solid var(--bg);
-  display: flex;
-  align-items: baseline;
-  gap: 0.3rem;
-}
+.cl{padding:.15rem 0;font-size:.85rem;line-height:1.45;border-bottom:1px solid var(--bg);display:flex;align-items:baseline;gap:.2rem}
+.cl:last-child{border-bottom:0}
+.cp{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#fff;background:var(--ac);padding:.08rem .25rem;border-radius:2px;min-width:26px;text-align:center;flex-shrink:0}
+.cx{color:var(--mu)}.ct{font-weight:600;color:var(--ac);background:var(--hl);padding:0 2px;border-radius:2px}
+.ctx-hl{background:#ffd700;padding:0 1px;border-radius:1px}
+.more{color:var(--mu);font-style:italic;font-size:.78rem;padding:.1rem 0}
 
-.ctx-line:last-child { border-bottom: none; }
-
-.ctx-page {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--muted);
-  min-width: 35px;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.ctx-left { color: var(--muted); text-align: right; }
-.ctx-token { font-weight: 600; color: var(--accent); background: var(--highlight); padding: 0 3px; border-radius: 2px; }
-.ctx-right { color: var(--muted); }
-
-/* Search results */
-.search-result {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-}
-
-.search-result h3 {
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--accent);
-  margin-bottom: 0.3rem;
-}
-
-.search-result .lemma-options {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin-bottom: 0.5rem;
-}
-
-/* Stats bar */
-.stats {
-  padding: 0.5rem 2rem;
-  font-size: 0.8rem;
-  color: var(--muted);
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  gap: 2rem;
-}
-
-.stats span { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
-
-/* Responsive */
-@media (max-width: 768px) {
-  header { padding: 1rem; gap: 0.8rem; }
-  main { padding: 1rem; }
-  .search-box { max-width: 100%; }
-}
+/* List mode */
+.list-row{display:flex;align-items:baseline;gap:.5rem;padding:.25rem .5rem;border-bottom:1px solid var(--bg);font-size:.88rem;cursor:pointer}
+.list-row:hover{background:var(--tg)}
+.list-lem{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ac);min-width:140px}
+.list-cnt{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--mu);min-width:50px;text-align:right}
+.list-forms{font-size:.78rem;color:var(--mu)}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>İnce Memed <span>Lemma Gezgini</span></h1>
+  <h1>İnce Memed <span>Lemma</span></h1>
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('zeyrek')">Zeyrek</button>
-    <button class="tab" onclick="switchTab('qwen')">Qwen</button>
+    <button class="tab act" data-t="zeyrek" onclick="switchTab('zeyrek')">Zeyrek</button>
+    <button class="tab" data-t="qwen" onclick="switchTab('qwen')">Qwen</button>
   </div>
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Kelime ara... (ör: vardı, koyun)" 
-           onkeyup="if(event.key==='Enter')doSearch()">
+  <div class="sbox">
+    <input type="text" id="si" placeholder="Ara... (ör: vardı, koy.*, gel[imş]+)" 
+           oninput="liveSearch()" onkeyup="if(event.key==='Enter')doSearch()">
+    <button class="rx" id="rxbtn" onclick="toggleRx()" title="Regex modu">.*</button>
+    <button onclick="doSearch()">Ara</button>
   </div>
-  <div class="ctx-control">
-    <label>Bağlam: <span id="ctxVal">4</span></label>
-    <input type="range" id="ctxRange" min="2" max="10" value="4" 
-           oninput="document.getElementById('ctxVal').textContent=this.value">
+  <div class="ctr">
+    <label>±<span id="cv">5</span></label>
+    <input type="range" id="cr" min="2" max="12" value="5" oninput="$('cv').textContent=this.value">
+    <label>Maks:<span id="mv">8</span></label>
+    <input type="range" id="mr" min="3" max="30" value="8" oninput="$('mv').textContent=this.value">
+    <button class="mode-btn act" id="m_tree" onclick="setMode('tree')">Ağaç</button>
+    <button class="mode-btn" id="m_list" onclick="setMode('list')">Liste</button>
   </div>
 </header>
-
-<div class="stats" id="statsBar"></div>
-
-<nav class="letter-nav" id="letterNav"></nav>
-
-<main id="content">
-  <div class="loading">Yükleniyor</div>
-</main>
+<div class="info" id="ib"></div>
+<div class="bread" id="bc"></div>
+<nav class="lgrid" id="ln"></nav>
+<main id="co"><div class="loading">Veri yükleniyor</div></main>
 
 <script>
-let currentTab = 'zeyrek';
-let currentLetter = 'A';
-let meta = null;
-let formIndex = null;
-let cache = {};
+const $=id=>document.getElementById(id);
+const E=s=>s?s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';
 
-const BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') 
-  ? './data' : './data';
+let D=null,TAB='zeyrek',IDX={},FIDX={},MODE='tree',RX=false;
+let NAV=[]; // breadcrumb path: [{label,prefix}]
 
-async function loadJSON(path) {
-  if (cache[path]) return cache[path];
-  const r = await fetch(BASE + '/' + path);
-  if (!r.ok) return null;
-  const d = await r.json();
-  cache[path] = d;
-  return d;
+/* === Türkçe lowercase === */
+function trLower(s){return s.replace(/İ/g,'i').replace(/I/g,'ı').toLowerCase()}
+
+/* === DATA === */
+async function init(){await loadData('zeyrek')}
+
+async function loadData(tab){
+  $('co').innerHTML='<div class="loading">Veri yükleniyor (~16 MB)</div>';
+  D=null;IDX={};FIDX={};
+  try{const r=await fetch('./'+tab+'.json');D=await r.json()}
+  catch(e){$('co').innerHTML='<p>Yüklenemedi: '+e.message+'</p>';return}
+  $('co').innerHTML='<div class="loading">İndeks oluşturuluyor</div>';
+  await new Promise(r=>setTimeout(r,30));
+  for(let i=0;i<D.length;i++){
+    const[tok,lems]=D[i];
+    const tl=trLower(tok);
+    if(!FIDX[tl])FIDX[tl]=[];FIDX[tl].push(i);
+    for(const lem of lems){
+      const ll=trLower(lem);
+      if(!IDX[ll])IDX[ll]=[];IDX[ll].push(i);
+    }
+  }
+  updateInfo();
+  NAV=[];
+  showLevel('');
 }
 
-async function init() {
-  meta = await loadJSON('meta.json');
-  if (!meta) { document.getElementById('content').innerHTML = '<p>Veri yüklenemedi.</p>'; return; }
-  
-  // Form index'i arka planda yükle
-  loadJSON('form_index.json').then(d => { formIndex = d; });
-  
-  buildLetterNav();
-  loadLetter('A');
+function updateInfo(){
+  const nL=Object.keys(IDX).length,nT=Object.keys(FIDX).length;
+  const errCount=Object.keys(IDX).filter(k=>k.startsWith('⚠')).length;
+  $('ib').innerHTML=`<div>${TAB==='zeyrek'?'Zeyrek Morfolojik Analiz':'Qwen Lemmatizasyon'}</div>
+    <div>Satır: <b>${D.length.toLocaleString()}</b></div>
+    <div>Lemma: <b>${nL.toLocaleString()}</b></div>
+    ${errCount?'<div style="color:var(--err)">Hatalı: <b>'+errCount+'</b></div>':''}`;
 }
 
-function buildLetterNav() {
-  const nav = document.getElementById('letterNav');
-  const idx = currentTab === 'zeyrek' ? meta.zeyrek_index : meta.qwen_index;
-  const letters = Object.keys(idx).sort();
+/* === PROGRESSIVE DRILL-DOWN === */
+function showLevel(prefix){
+  // prefix="" → A-Z harfler
+  // prefix="a" → aa, ab, ac, ...
+  // prefix="ab" → aba, abl, ...
+  // prefix uzunca → lemma listesi göster
   
-  nav.innerHTML = letters.map(l => 
-    `<button class="letter-btn ${l===currentLetter?'active':''}" 
-            onclick="loadLetter('${l}')" title="${idx[l]} lemma">${l}</button>`
-  ).join('');
+  updateBreadcrumb(prefix);
   
-  // Stats
-  const totalLemmas = Object.values(idx).reduce((a,b)=>a+b, 0);
-  document.getElementById('statsBar').innerHTML = 
-    `<div>${currentTab === 'zeyrek' ? 'Zeyrek Morfolojik Analiz' : 'Qwen LLM Lemmatizasyon'}</div>
-     <div>Lemma: <span>${totalLemmas.toLocaleString()}</span></div>
-     <div>Harfler: <span>${letters.length}</span></div>`;
+  // Bu prefix ile başlayan tüm lemmaları bul
+  const matching=[];
+  const isError = prefix === '⚠';
+  
+  const PUNC=/^[^a-zA-ZçÇğĞıİöÖşŞüÜâÂîÎûÛ⚠]/;
+  for(const lem of Object.keys(IDX)){
+    if(PUNC.test(lem))continue; // noktalama lemmalarını atla
+    if(isError){
+      if(lem.startsWith('⚠')) matching.push(lem);
+    } else if(prefix===''){
+      matching.push(lem);
+    } else {
+      if(trLower(lem).startsWith(prefix.toLowerCase()) && !lem.startsWith('⚠')) matching.push(lem);
+    }
+  }
+  
+  if(prefix===''||isError){
+    // İlk harf bazlı grupla
+    const groups={};
+    for(const lem of matching){
+      const key=isError?'⚠':trLower(lem)[0]?.toUpperCase()||'_';
+      const normKey=trNormalize(key);
+      if(!groups[normKey])groups[normKey]={count:0,uses:0};
+      groups[normKey].count++;
+      groups[normKey].uses+=IDX[lem].length;
+    }
+    renderLetterGrid(groups,prefix,isError);
+    $('co').innerHTML=`<p style="color:var(--mu);padding:1rem">Bir harf seçin veya arama yapın. ${matching.length.toLocaleString()} lemma mevcut.</p>`;
+  } else if(prefix.length < 4 && matching.length > 60){
+    // Alt gruplar göster (prefix+1 harf) — 4 karakter derinliğe kadar
+    const groups={};
+    const plen=prefix.length;
+    for(const lem of matching){
+      const ll=trLower(lem);
+      const key=ll.substring(0,plen+1);
+      if(!groups[key])groups[key]={count:0,uses:0};
+      groups[key].count++;
+      groups[key].uses+=IDX[lem].length;
+    }
+    renderSubGrid(groups,prefix);
+    $('co').innerHTML=`<p style="color:var(--mu);padding:1rem">${matching.length} lemma — alt grup seçin.</p>`;
+  } else {
+    // Lemma listesi göster
+    $('ln').innerHTML='';
+    matching.sort((a,b)=>a.localeCompare(b,'tr'));
+    if(MODE==='tree') renderTree(matching);
+    else renderList(matching);
+  }
 }
 
-async function loadLetter(letter) {
-  currentLetter = letter;
-  const content = document.getElementById('content');
-  content.innerHTML = '<div class="loading">Yükleniyor</div>';
-  
-  // Update nav
-  document.querySelectorAll('.letter-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent.trim() === letter);
+function trNormalize(c){
+  const map={'ç':'C','Ç':'C','ğ':'G','Ğ':'G','ı':'I','İ':'I','i':'I','I':'I',
+             'ö':'O','Ö':'O','ş':'S','Ş':'S','ü':'U','Ü':'U','â':'A','Â':'A','î':'I','Î':'I','û':'U','Û':'U'};
+  const up=c.toUpperCase();
+  return map[c]||map[up]||up;
+}
+
+function updateBreadcrumb(prefix){
+  let html='<a onclick="showLevel(\'\')">⌂</a>';
+  if(prefix){
+    for(let i=1;i<=prefix.length;i++){
+      const p=prefix.substring(0,i);
+      html+=`<span class="sep">›</span><a onclick="showLevel('${E(p)}')">${E(p.toUpperCase())}</a>`;
+    }
+  }
+  $('bc').innerHTML=html;
+}
+
+function renderLetterGrid(groups,prefix,isError){
+  const trOrder='ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ';
+  let letters=Object.keys(groups);
+  // Türkçe sırala
+  letters.sort((a,b)=>{
+    const ai=trOrder.indexOf(a),bi=trOrder.indexOf(b);
+    if(ai>=0&&bi>=0)return ai-bi;
+    if(ai>=0)return -1;if(bi>=0)return 1;
+    return a.localeCompare(b);
   });
   
-  const data = await loadJSON(`${currentTab}/${letter}.json`);
-  if (!data) { content.innerHTML = '<p>Veri bulunamadı.</p>'; return; }
+  let html=letters.map(l=>{
+    const g=groups[l];
+    return`<button class="lbtn" onclick="showLevel('${E(trLower(l))}')">${l}<span class="n">${g.count}</span></button>`;
+  }).join('');
   
-  const ctxWindow = parseInt(document.getElementById('ctxRange').value);
-  renderLemmaList(data, ctxWindow);
+  // Hatalı butonu (Qwen tab)
+  if(!isError && TAB==='qwen'){
+    const errLems=Object.keys(IDX).filter(k=>k.startsWith('⚠'));
+    if(errLems.length)
+      html+=`<button class="lbtn err" onclick="showLevel('⚠')">⚠<span class="n">${errLems.length}</span></button>`;
+  }
+  $('ln').innerHTML=html;
 }
 
-function renderLemmaList(data, ctxWindow) {
-  const content = document.getElementById('content');
-  const lemmas = Object.keys(data).sort((a,b) => a.localeCompare(b, 'tr'));
-  
-  let html = '';
-  for (const lemma of lemmas) {
-    const forms = data[lemma];
-    const formKeys = Object.keys(forms).sort();
-    const totalOccur = formKeys.reduce((s, f) => s + forms[f][1], 0);
+function renderSubGrid(groups,prefix){
+  const keys=Object.keys(groups).sort((a,b)=>a.localeCompare(b,'tr'));
+  $('ln').innerHTML=keys.map(k=>{
+    const g=groups[k];
+    return`<button class="lbtn" onclick="showLevel('${E(k)}')">${E(k)}<span class="n">${g.count}</span></button>`;
+  }).join('');
+}
+
+/* === RENDER TREE === */
+function renderTree(lemmaKeys){
+  const mx=+$('mr').value;
+  let h='';
+  for(const lem of lemmaKeys){
+    const indices=IDX[lem];if(!indices)continue;
+    const forms={};
+    for(const i of indices){const fl=trLower(D[i][0]);if(!forms[fl])forms[fl]=[];forms[fl].push(i)}
+    const fk=Object.keys(forms).sort((a,b)=>a.localeCompare(b,'tr'));
+    const displayLem=lem.startsWith('⚠')?lem.substring(1):lem;
+    const isErr=lem.startsWith('⚠');
     
-    html += `<div class="lemma-group">
-      <div class="lemma-header" onclick="toggleLemma(this)">
-        <span class="arrow">▶</span>
-        <span class="lemma-name">${esc(lemma)}</span>
-        <span class="lemma-meta">${formKeys.length} form · ${totalOccur} kullanım</span>
-      </div>
-      <div class="lemma-body">`;
-    
-    for (const form of formKeys) {
-      const [contexts, total] = forms[form];
-      html += `<div class="form-group">
-        <div class="form-header" onclick="toggleForm(this)">
-          <span class="arrow">▶</span>
-          <span class="form-name">${esc(form)}</span>
-          <span class="form-count">${total}×</span>
-        </div>
-        <div class="form-body">`;
-      
-      for (const ctx of contexts) {
-        const [left, token, right, page] = ctx;
-        const lWords = left.split(/\s+/).slice(-ctxWindow);
-        const rWords = right.split(/\s+/).slice(0, ctxWindow);
-        html += `<div class="ctx-line">
-          <span class="ctx-page">s.${page}</span>
-          <span class="ctx-left">${esc(lWords.join(' '))}</span>
-          <span class="ctx-token">${esc(token)}</span>
-          <span class="ctx-right">${esc(rWords.join(' '))}</span>
-        </div>`;
-      }
-      
-      if (total > contexts.length) {
-        html += `<div class="ctx-line" style="color:var(--muted);font-style:italic;">
-          ... ve ${total - contexts.length} kullanım daha</div>`;
-      }
-      
-      html += '</div></div>';
+    h+=`<div class="card"><div class="ch" onclick="tog(this)">
+      <span class="ar">▶</span>
+      <span class="cn"${isErr?' style="color:var(--err)"':''}>${E(displayLem)}</span>
+      ${isErr?'<span style="font-size:.7rem;color:var(--err)">hatalı</span>':''}
+      <span class="cm">${fk.length} form · ${indices.length}×</span>
+    </div><div class="cb">`;
+    for(const form of fk){
+      const fl=forms[form],n=fl.length;
+      h+=`<div class="fg"><div class="fh" onclick="tog(this)">
+        <span class="ar">▶</span><span class="fn">${E(form)}</span><span class="fc">${n}×</span>
+      </div><div class="fb">`;
+      for(let k=0;k<Math.min(n,mx);k++) h+=ctxHTML(fl[k]);
+      if(n>mx) h+=`<div class="more">… +${n-mx}</div>`;
+      h+='</div></div>';
     }
-    html += '</div></div>';
+    h+='</div></div>';
   }
-  
-  content.innerHTML = html || '<p>Bu harfte lemma yok.</p>';
+  $('co').innerHTML=h||'<p>Sonuç yok.</p>';
 }
 
-function toggleLemma(el) {
-  el.classList.toggle('open');
-  el.nextElementSibling.classList.toggle('open');
+/* === RENDER LIST === */
+function renderList(lemmaKeys){
+  let h='<div style="border:1px solid var(--bd);border-radius:5px;background:var(--cd);overflow:hidden">';
+  for(const lem of lemmaKeys){
+    const indices=IDX[lem];if(!indices)continue;
+    const forms=new Set();
+    for(const i of indices) forms.add(trLower(D[i][0]));
+    const displayLem=lem.startsWith('⚠')?lem.substring(1):lem;
+    const isErr=lem.startsWith('⚠');
+    h+=`<div class="list-row" onclick="drillLemma('${E(lem.replace(/'/g,"\\'"))}')">
+      <span class="list-lem"${isErr?' style="color:var(--err)"':''}>${E(displayLem)}</span>
+      <span class="list-cnt">${indices.length}×</span>
+      <span class="list-forms">${[...forms].slice(0,8).map(f=>E(f)).join(', ')}${forms.size>8?' …':''}</span>
+    </div>`;
+  }
+  h+='</div>';
+  $('co').innerHTML=h;
 }
 
-function toggleForm(el) {
-  el.classList.toggle('open');
-  el.nextElementSibling.classList.toggle('open');
+function drillLemma(lem){
+  MODE='tree';$('m_tree').classList.add('act');$('m_list').classList.remove('act');
+  renderTree([lem]);
+  // Auto-open first
+  const first=$('co').querySelector('.ch');
+  if(first){first.classList.add('op');first.nextElementSibling.classList.add('op')}
 }
 
-async function doSearch() {
-  const query = document.getElementById('searchInput').value.trim().toLowerCase();
-  if (!query) return;
+/* === CONTEXT === */
+function ctxHTML(linenum,highlight){
+  const w=+$('cr').value;
+  const[tok,,pg]=D[linenum];
+  const left=[],right=[];
+  for(let j=linenum-1;left.length<w&&j>=0;j--){if(D[j][2]!==pg)break;left.unshift(D[j][0])}
+  for(let j=linenum+1;right.length<w&&j<D.length;j++){if(D[j][2]!==pg)break;right.push(D[j][0])}
   
-  const content = document.getElementById('content');
-  content.innerHTML = '<div class="loading">Aranıyor</div>';
-  
-  // 1) Form indeksinde ara
-  if (!formIndex) {
-    formIndex = await loadJSON('form_index.json');
+  let lText=E(left.join(' ')),rText=E(right.join(' '));
+  if(highlight){
+    try{
+      const re=new RegExp('('+highlight+')','gi');
+      lText=lText.replace(re,'<span class="ctx-hl">$1</span>');
+      rText=rText.replace(re,'<span class="ctx-hl">$1</span>');
+    }catch(e){}
   }
   
-  const ctxWindow = parseInt(document.getElementById('ctxRange').value);
-  let results = [];
-  
-  // Form eşleşmesi (ör: "vardı" aratınca)
-  if (formIndex && formIndex[query]) {
-    results.push({ type: 'form', form: query, lemmas: formIndex[query] });
+  return`<div class="cl"><span class="cp">${pg}</span><span class="cx">${lText}</span><span class="ct">${E(tok)}</span><span class="cx">${rText}</span></div>`;
+}
+
+/* === SEARCH === */
+let searchTimeout;
+function liveSearch(){
+  clearTimeout(searchTimeout);
+  const q=$('si').value.trim();
+  if(!q||!D)return;
+  if(!RX && q.length<=4){
+    // 4 karaktere kadar drill-down gibi davran
+    showLevel(trLower(q));
+    return;
   }
+  if(q.length<2)return;
+  searchTimeout=setTimeout(()=>doSearch(true),300);
+}
+
+function doSearch(isLive){
+  const raw=$('si').value.trim();
+  if(!raw||!D)return;
+  const q=trLower(raw);
+  const mx=+$('mr').value;
   
-  // Lemma eşleşmesi de ara — hangi harfte?
-  const firstChar = query[0].toUpperCase();
-  const lmap = {'İ':'I','Ö':'O','Ü':'U','Ş':'S','Ç':'C','Ğ':'G','Â':'A','Î':'I'};
-  const bucket = lmap[firstChar] || firstChar;
+  let h='';
   
-  const data = await loadJSON(`${currentTab}/${bucket}.json`);
-  if (data) {
+  if(RX){
+    // Regex arama — lemma, token ve bağlam üzerinde
+    let re;
+    try{re=new RegExp(q,'i')}catch(e){$('co').innerHTML='<p style="color:var(--err)">Geçersiz regex: '+E(e.message)+'</p>';return}
+    
+    // 1) Lemma eşleşme
+    const lemMatches=Object.keys(IDX).filter(l=>re.test(l));
+    // 2) Token eşleşme
+    const tokMatches=Object.keys(FIDX).filter(t=>re.test(t));
+    
+    h+=`<h2 style="margin-bottom:.8rem;color:var(--ac)">Regex: /${E(raw)}/</h2>`;
+    
+    if(lemMatches.length>0){
+      h+=`<h3 style="color:var(--mu);margin:.5rem 0">Lemma eşleşmeleri (${lemMatches.length})</h3>`;
+      lemMatches.sort((a,b)=>a.localeCompare(b,'tr'));
+      for(const lem of lemMatches.slice(0,50)){
+        const indices=IDX[lem];
+        h+=`<div class="card"><div class="ch" onclick="tog(this)"><span class="ar">▶</span>
+          <span class="cn">${E(lem.replace(/⚠/,''))}</span><span class="cm">${indices.length}×</span>
+        </div><div class="cb">`;
+        for(let k=0;k<Math.min(indices.length,mx);k++) h+=ctxHTML(indices[k],raw);
+        if(indices.length>mx) h+=`<div class="more">… +${indices.length-mx}</div>`;
+        h+='</div></div>';
+      }
+      if(lemMatches.length>50) h+=`<div class="more">… +${lemMatches.length-50} lemma</div>`;
+    }
+    
+    if(tokMatches.length>0){
+      const uniqueTok=new Set(tokMatches);
+      const lemmaOfTok=new Set();
+      for(const t of tokMatches)for(const i of FIDX[t])for(const l of D[i][1])lemmaOfTok.add(trLower(l));
+      
+      h+=`<h3 style="color:var(--mu);margin:.5rem 0">Token eşleşmeleri (${tokMatches.length} form)</h3>`;
+      for(const tok of tokMatches.slice(0,30)){
+        const lines=FIDX[tok];
+        h+=`<div class="card"><div class="ch" onclick="tog(this)"><span class="ar">▶</span>
+          <span class="fn">${E(tok)}</span><span class="cm">${lines.length}×</span>
+        </div><div class="cb">`;
+        for(let k=0;k<Math.min(lines.length,mx);k++) h+=ctxHTML(lines[k],raw);
+        if(lines.length>mx) h+=`<div class="more">… +${lines.length-mx}</div>`;
+        h+='</div></div>';
+      }
+    }
+    
+    // 3) Bağlam araması (yavaş, sadece Enter ile)
+    if(!isLive && lemMatches.length===0 && tokMatches.length===0){
+      h+=`<h3 style="color:var(--mu);margin:.5rem 0">Bağlamda aranıyor...</h3>`;
+      const ctxResults=[];
+      for(let i=0;i<D.length&&ctxResults.length<100;i++){
+        if(re.test(D[i][0])) ctxResults.push(i);
+      }
+      if(ctxResults.length>0){
+        h+=`<div class="card"><div class="ch op"><span class="ar" style="transform:rotate(90deg)">▶</span>
+          <span class="cn">Bağlam sonuçları</span><span class="cm">${ctxResults.length}×</span>
+        </div><div class="cb op">`;
+        for(const i of ctxResults.slice(0,mx)) h+=ctxHTML(i,raw);
+        h+='</div></div>';
+      }
+    }
+    
+    if(!h.includes('card'))h+='<p>Sonuç bulunamadı.</p>';
+    
+  } else {
+    // Normal arama
+    h+=`<h2 style="margin-bottom:.8rem;color:var(--ac)">Arama: "${E(raw)}"</h2>`;
+    
+    // Token eşleşme
+    if(FIDX[q]){
+      const lines=FIDX[q];
+      const lemSet=new Set();
+      for(const i of lines)for(const l of D[i][1])lemSet.add(l);
+      
+      h+=`<div class="card"><div class="ch op"><span class="ar" style="transform:rotate(90deg)">▶</span>
+        <span class="fn">${E(raw)}</span>
+        <span class="cm">token · ${lines.length}× · lemmalar: ${[...lemSet].map(l=>'<b>'+E(l)+'</b>').join(', ')}</span>
+      </div><div class="cb op">`;
+      
+      for(const lem of [...lemSet].sort()){
+        const sub=lines.filter(i=>D[i][1].map(l=>trLower(l)).includes(trLower(lem)));
+        h+=`<div class="fg"><div class="fh op"><span class="ar" style="transform:rotate(90deg)">▶</span>
+          <span class="fn">→ ${E(lem)}</span><span class="fc">${sub.length}×</span>
+        </div><div class="fb op">`;
+        for(let k=0;k<Math.min(sub.length,mx);k++) h+=ctxHTML(sub[k]);
+        if(sub.length>mx) h+=`<div class="more">… +${sub.length-mx}</div>`;
+        h+='</div></div>';
+      }
+      h+='</div></div>';
+    }
+    
     // Lemma tam eşleşme
-    for (const lemma of Object.keys(data)) {
-      if (lemma.toLowerCase() === query) {
-        results.push({ type: 'lemma_exact', lemma, forms: data[lemma] });
+    if(IDX[q]){
+      const indices=IDX[q];
+      const forms={};
+      for(const i of indices){const fl=trLower(D[i][0]);if(!forms[fl])forms[fl]=[];forms[fl].push(i)}
+      h+=`<div class="card"><div class="ch op"><span class="ar" style="transform:rotate(90deg)">▶</span>
+        <span class="cn">${E(raw)}</span><span class="cm">lemma · ${Object.keys(forms).length} form · ${indices.length}×</span>
+      </div><div class="cb op">`;
+      for(const form of Object.keys(forms).sort((a,b)=>a.localeCompare(b,'tr'))){
+        const fl=forms[form];
+        h+=`<div class="fg"><div class="fh" onclick="tog(this)"><span class="ar">▶</span>
+          <span class="fn">${E(form)}</span><span class="fc">${fl.length}×</span>
+        </div><div class="fb">`;
+        for(let k=0;k<Math.min(fl.length,mx);k++) h+=ctxHTML(fl[k]);
+        if(fl.length>mx) h+=`<div class="more">… +${fl.length-mx}</div>`;
+        h+='</div></div>';
       }
+      h+='</div></div>';
     }
-    // Lemma kısmi eşleşme
-    for (const lemma of Object.keys(data)) {
-      if (lemma.toLowerCase().includes(query) && lemma.toLowerCase() !== query) {
-        results.push({ type: 'lemma_partial', lemma, forms: data[lemma] });
+    
+    // Kısmi eşleşme
+    const partials=Object.keys(IDX).filter(l=>l!==q&&l.includes(q)).sort((a,b)=>a.localeCompare(b,'tr'));
+    if(partials.length>0){
+      h+=`<h3 style="color:var(--mu);margin:.8rem 0 .4rem">Kısmi (${partials.length})</h3>`;
+      for(const lem of partials.slice(0,30)){
+        h+=`<div style="padding:.15rem .4rem;cursor:pointer;color:var(--ac);font-family:'JetBrains Mono',monospace;font-size:.85rem" 
+             onclick="$('si').value='${E(lem.replace(/'/g,"\\'"))}';doSearch()">${E(lem)} <span style="color:var(--mu)">(${IDX[lem].length}×)</span></div>`;
       }
+      if(partials.length>30) h+=`<div class="more">… +${partials.length-30}</div>`;
     }
+    
+    if(!FIDX[q]&&!IDX[q]&&partials.length===0) h+='<p>Sonuç bulunamadı.</p>';
   }
   
-  // Form eşleşmeleri için bağlamları bul
-  let html = `<h2 style="margin-bottom:1rem;color:var(--accent);">Arama: "${esc(query)}"</h2>`;
-  
-  if (results.length === 0) {
-    html += '<p>Sonuç bulunamadı.</p>';
-  }
-  
-  for (const r of results) {
-    if (r.type === 'form') {
-      html += `<div class="search-result">
-        <h3>${esc(r.form)}</h3>
-        <div class="lemma-options">Olası lemmalar: ${r.lemmas.map(l => `<b>${esc(l)}</b>`).join(', ')}</div>`;
-      
-      // Her olası lemma için bağlam bul
-      for (const lemmaInfo of r.lemmas) {
-        const lemmaName = lemmaInfo.split(' (')[0];
-        const lb = lmap[lemmaName[0]?.toUpperCase()] || lemmaName[0]?.toUpperCase();
-        const ldata = await loadJSON(`${currentTab}/${lb}.json`);
-        if (ldata && ldata[lemmaName] && ldata[lemmaName][r.form]) {
-          const [contexts, total] = ldata[lemmaName][r.form];
-          html += `<div style="margin:0.5rem 0 0.5rem 1rem;">
-            <b style="color:var(--accent)">${esc(lemmaName)}:</b>`;
-          for (const ctx of contexts.slice(0, 5)) {
-            const [left, token, right, page] = ctx;
-            html += `<div class="ctx-line">
-              <span class="ctx-page">s.${page}</span>
-              <span class="ctx-left">${esc(left.split(/\s+/).slice(-ctxWindow).join(' '))}</span>
-              <span class="ctx-token">${esc(token)}</span>
-              <span class="ctx-right">${esc(right.split(/\s+/).slice(0, ctxWindow).join(' '))}</span>
-            </div>`;
-          }
-          if (total > 5) html += `<div class="ctx-line" style="color:var(--muted);font-style:italic;">... ve ${total-5} kullanım daha</div>`;
-          html += '</div>';
-        }
-      }
-      html += '</div>';
-    } else if (r.type === 'lemma_exact' || r.type === 'lemma_partial') {
-      const tag = r.type === 'lemma_exact' ? '' : ' (kısmi eşleşme)';
-      const forms = r.forms;
-      const formKeys = Object.keys(forms).sort();
-      html += `<div class="lemma-group">
-        <div class="lemma-header open">
-          <span class="arrow" style="transform:rotate(90deg)">▶</span>
-          <span class="lemma-name">${esc(r.lemma)}${tag}</span>
-        </div>
-        <div class="lemma-body open">`;
-      for (const form of formKeys) {
-        const [contexts, total] = forms[form];
-        html += `<div class="form-group">
-          <div class="form-header open">
-            <span class="arrow" style="transform:rotate(90deg)">▶</span>
-            <span class="form-name">${esc(form)}</span>
-            <span class="form-count">${total}×</span>
-          </div>
-          <div class="form-body open">`;
-        for (const ctx of contexts) {
-          const [left, token, right, page] = ctx;
-          html += `<div class="ctx-line">
-            <span class="ctx-page">s.${page}</span>
-            <span class="ctx-left">${esc(left.split(/\s+/).slice(-ctxWindow).join(' '))}</span>
-            <span class="ctx-token">${esc(token)}</span>
-            <span class="ctx-right">${esc(right.split(/\s+/).slice(0, ctxWindow).join(' '))}</span>
-          </div>`;
-        }
-        if (total > contexts.length) {
-          html += `<div class="ctx-line" style="color:var(--muted);font-style:italic;">... ve ${total - contexts.length} kullanım daha</div>`;
-        }
-        html += '</div></div>';
-      }
-      html += '</div></div>';
-    }
-  }
-  
-  content.innerHTML = html;
+  $('co').innerHTML=h;
 }
 
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
-  cache = {}; // Farklı tab, cache temizle
-  buildLetterNav();
-  loadLetter(currentLetter);
+/* === UI === */
+function tog(el){el.classList.toggle('op');el.nextElementSibling.classList.toggle('op')}
+function switchTab(tab){
+  TAB=tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('act',t.dataset.t===tab));
+  loadData(tab);
 }
-
-function esc(s) {
-  if (!s) return '';
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function setMode(m){
+  MODE=m;
+  $('m_tree').classList.toggle('act',m==='tree');
+  $('m_list').classList.toggle('act',m==='list');
+  // Re-render if on a lemma page
+  const bc=$('bc').textContent;
+  if(bc.length>1)showLevel(NAV.length?NAV[NAV.length-1]:'');
 }
-
-// ctxRange değişince mevcut sayfayı yeniden render et
-document.getElementById('ctxRange').addEventListener('change', () => loadLetter(currentLetter));
+function toggleRx(){RX=!RX;$('rxbtn').classList.toggle('on',RX);$('si').placeholder=RX?'Regex ara... (ör: gel[imş]+, koy.*mak)':'Ara... (ör: vardı, koyun, gelmek)'}
 
 init();
 </script>
