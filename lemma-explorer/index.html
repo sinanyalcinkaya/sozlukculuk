@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İnce Memed — Lemma Gezgini</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg: #faf8f5;
+  --fg: #2c2416;
+  --accent: #8b4513;
+  --accent2: #c4713b;
+  --muted: #8a7e6f;
+  --border: #ddd5c8;
+  --card: #fff;
+  --highlight: #fff3cd;
+  --tag-bg: #f0e8db;
+  --shadow: rgba(44,36,22,0.08);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Header */
+header {
+  background: var(--fg);
+  color: var(--bg);
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+header h1 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+header h1 span { color: var(--accent2); }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-left: auto;
+}
+
+.tab {
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  border: 1px solid var(--muted);
+  background: transparent;
+  color: var(--bg);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.tab:first-child { border-radius: 4px 0 0 4px; }
+.tab:last-child { border-radius: 0 4px 4px 0; }
+.tab.active { background: var(--accent2); border-color: var(--accent2); font-weight: 600; }
+.tab:hover:not(.active) { background: rgba(255,255,255,0.1); }
+
+/* Search */
+.search-box {
+  display: flex;
+  gap: 0.5rem;
+  flex-grow: 1;
+  max-width: 400px;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--muted);
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  background: rgba(255,255,255,0.1);
+  color: var(--bg);
+  outline: none;
+}
+
+.search-box input::placeholder { color: var(--muted); }
+.search-box input:focus { border-color: var(--accent2); }
+
+/* Context slider */
+.ctx-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.ctx-control input[type=range] { width: 80px; accent-color: var(--accent2); }
+
+/* Letter nav */
+.letter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 0.8rem 2rem;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+
+.letter-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--bg);
+  color: var(--fg);
+  transition: all 0.15s;
+}
+
+.letter-btn:hover { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+.letter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.letter-btn .count {
+  display: none;
+}
+
+/* Main content */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.loading::after {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Lemma tree */
+.lemma-group {
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card);
+  box-shadow: 0 1px 3px var(--shadow);
+  overflow: hidden;
+}
+
+.lemma-header {
+  padding: 0.7rem 1rem;
+  background: var(--tag-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.lemma-header:hover { background: var(--border); }
+
+.lemma-header .arrow {
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: var(--muted);
+}
+
+.lemma-header.open .arrow { transform: rotate(90deg); }
+
+.lemma-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--accent);
+}
+
+.lemma-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+.lemma-body {
+  display: none;
+  padding: 0 1rem 0.8rem;
+}
+
+.lemma-body.open { display: block; }
+
+/* Form level */
+.form-group { margin-top: 0.6rem; }
+
+.form-header {
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 3px;
+  font-size: 0.95rem;
+}
+
+.form-header:hover { background: var(--bg); }
+.form-header .arrow { font-size: 0.6rem; color: var(--muted); transition: transform 0.2s; }
+.form-header.open .arrow { transform: rotate(90deg); }
+
+.form-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.form-count {
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: var(--tag-bg);
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+}
+
+.form-body {
+  display: none;
+  padding-left: 1.5rem;
+}
+
+.form-body.open { display: block; }
+
+/* Context line */
+.ctx-line {
+  padding: 0.25rem 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--bg);
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.ctx-line:last-child { border-bottom: none; }
+
+.ctx-page {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  min-width: 35px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ctx-left { color: var(--muted); text-align: right; }
+.ctx-token { font-weight: 600; color: var(--accent); background: var(--highlight); padding: 0 3px; border-radius: 2px; }
+.ctx-right { color: var(--muted); }
+
+/* Search results */
+.search-result {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.search-result h3 {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+.search-result .lemma-options {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+/* Stats bar */
+.stats {
+  padding: 0.5rem 2rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 2rem;
+}
+
+.stats span { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  header { padding: 1rem; gap: 0.8rem; }
+  main { padding: 1rem; }
+  .search-box { max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>İnce Memed <span>Lemma Gezgini</span></h1>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('zeyrek')">Zeyrek</button>
+    <button class="tab" onclick="switchTab('qwen')">Qwen</button>
+  </div>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Kelime ara... (ör: vardı, koyun)" 
+           onkeyup="if(event.key==='Enter')doSearch()">
+  </div>
+  <div class="ctx-control">
+    <label>Bağlam: <span id="ctxVal">4</span></label>
+    <input type="range" id="ctxRange" min="2" max="10" value="4" 
+           oninput="document.getElementById('ctxVal').textContent=this.value">
+  </div>
+</header>
+
+<div class="stats" id="statsBar"></div>
+
+<nav class="letter-nav" id="letterNav"></nav>
+
+<main id="content">
+  <div class="loading">Yükleniyor</div>
+</main>
+
+<script>
+let currentTab = 'zeyrek';
+let currentLetter = 'A';
+let meta = null;
+let formIndex = null;
+let cache = {};
+
+const BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') 
+  ? './data' : './data';
+
+async function loadJSON(path) {
+  if (cache[path]) return cache[path];
+  const r = await fetch(BASE + '/' + path);
+  if (!r.ok) return null;
+  const d = await r.json();
+  cache[path] = d;
+  return d;
+}
+
+async function init() {
+  meta = await loadJSON('meta.json');
+  if (!meta) { document.getElementById('content').innerHTML = '<p>Veri yüklenemedi.</p>'; return; }
+  
+  // Form index'i arka planda yükle
+  loadJSON('form_index.json').then(d => { formIndex = d; });
+  
+  buildLetterNav();
+  loadLetter('A');
+}
+
+function buildLetterNav() {
+  const nav = document.getElementById('letterNav');
+  const idx = currentTab === 'zeyrek' ? meta.zeyrek_index : meta.qwen_index;
+  const letters = Object.keys(idx).sort();
+  
+  nav.innerHTML = letters.map(l => 
+    `<button class="letter-btn ${l===currentLetter?'active':''}" 
+            onclick="loadLetter('${l}')" title="${idx[l]} lemma">${l}</button>`
+  ).join('');
+  
+  // Stats
+  const totalLemmas = Object.values(idx).reduce((a,b)=>a+b, 0);
+  document.getElementById('statsBar').innerHTML = 
+    `<div>${currentTab === 'zeyrek' ? 'Zeyrek Morfolojik Analiz' : 'Qwen LLM Lemmatizasyon'}</div>
+     <div>Lemma: <span>${totalLemmas.toLocaleString()}</span></div>
+     <div>Harfler: <span>${letters.length}</span></div>`;
+}
+
+async function loadLetter(letter) {
+  currentLetter = letter;
+  const content = document.getElementById('content');
+  content.innerHTML = '<div class="loading">Yükleniyor</div>';
+  
+  // Update nav
+  document.querySelectorAll('.letter-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === letter);
+  });
+  
+  const data = await loadJSON(`${currentTab}/${letter}.json`);
+  if (!data) { content.innerHTML = '<p>Veri bulunamadı.</p>'; return; }
+  
+  const ctxWindow = parseInt(document.getElementById('ctxRange').value);
+  renderLemmaList(data, ctxWindow);
+}
+
+function renderLemmaList(data, ctxWindow) {
+  const content = document.getElementById('content');
+  const lemmas = Object.keys(data).sort((a,b) => a.localeCompare(b, 'tr'));
+  
+  let html = '';
+  for (const lemma of lemmas) {
+    const forms = data[lemma];
+    const formKeys = Object.keys(forms).sort();
+    const totalOccur = formKeys.reduce((s, f) => s + forms[f][1], 0);
+    
+    html += `<div class="lemma-group">
+      <div class="lemma-header" onclick="toggleLemma(this)">
+        <span class="arrow">▶</span>
+        <span class="lemma-name">${esc(lemma)}</span>
+        <span class="lemma-meta">${formKeys.length} form · ${totalOccur} kullanım</span>
+      </div>
+      <div class="lemma-body">`;
+    
+    for (const form of formKeys) {
+      const [contexts, total] = forms[form];
+      html += `<div class="form-group">
+        <div class="form-header" onclick="toggleForm(this)">
+          <span class="arrow">▶</span>
+          <span class="form-name">${esc(form)}</span>
+          <span class="form-count">${total}×</span>
+        </div>
+        <div class="form-body">`;
+      
+      for (const ctx of contexts) {
+        const [left, token, right, page] = ctx;
+        const lWords = left.split(/\s+/).slice(-ctxWindow);
+        const rWords = right.split(/\s+/).slice(0, ctxWindow);
+        html += `<div class="ctx-line">
+          <span class="ctx-page">s.${page}</span>
+          <span class="ctx-left">${esc(lWords.join(' '))}</span>
+          <span class="ctx-token">${esc(token)}</span>
+          <span class="ctx-right">${esc(rWords.join(' '))}</span>
+        </div>`;
+      }
+      
+      if (total > contexts.length) {
+        html += `<div class="ctx-line" style="color:var(--muted);font-style:italic;">
+          ... ve ${total - contexts.length} kullanım daha</div>`;
+      }
+      
+      html += '</div></div>';
+    }
+    html += '</div></div>';
+  }
+  
+  content.innerHTML = html || '<p>Bu harfte lemma yok.</p>';
+}
+
+function toggleLemma(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
+function toggleForm(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
+async function doSearch() {
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!query) return;
+  
+  const content = document.getElementById('content');
+  content.innerHTML = '<div class="loading">Aranıyor</div>';
+  
+  // 1) Form indeksinde ara
+  if (!formIndex) {
+    formIndex = await loadJSON('form_index.json');
+  }
+  
+  const ctxWindow = parseInt(document.getElementById('ctxRange').value);
+  let results = [];
+  
+  // Form eşleşmesi (ör: "vardı" aratınca)
+  if (formIndex && formIndex[query]) {
+    results.push({ type: 'form', form: query, lemmas: formIndex[query] });
+  }
+  
+  // Lemma eşleşmesi de ara — hangi harfte?
+  const firstChar = query[0].toUpperCase();
+  const lmap = {'İ':'I','Ö':'O','Ü':'U','Ş':'S','Ç':'C','Ğ':'G','Â':'A','Î':'I'};
+  const bucket = lmap[firstChar] || firstChar;
+  
+  const data = await loadJSON(`${currentTab}/${bucket}.json`);
+  if (data) {
+    // Lemma tam eşleşme
+    for (const lemma of Object.keys(data)) {
+      if (lemma.toLowerCase() === query) {
+        results.push({ type: 'lemma_exact', lemma, forms: data[lemma] });
+      }
+    }
+    // Lemma kısmi eşleşme
+    for (const lemma of Object.keys(data)) {
+      if (lemma.toLowerCase().includes(query) && lemma.toLowerCase() !== query) {
+        results.push({ type: 'lemma_partial', lemma, forms: data[lemma] });
+      }
+    }
+  }
+  
+  // Form eşleşmeleri için bağlamları bul
+  let html = `<h2 style="margin-bottom:1rem;color:var(--accent);">Arama: "${esc(query)}"</h2>`;
+  
+  if (results.length === 0) {
+    html += '<p>Sonuç bulunamadı.</p>';
+  }
+  
+  for (const r of results) {
+    if (r.type === 'form') {
+      html += `<div class="search-result">
+        <h3>${esc(r.form)}</h3>
+        <div class="lemma-options">Olası lemmalar: ${r.lemmas.map(l => `<b>${esc(l)}</b>`).join(', ')}</div>`;
+      
+      // Her olası lemma için bağlam bul
+      for (const lemmaInfo of r.lemmas) {
+        const lemmaName = lemmaInfo.split(' (')[0];
+        const lb = lmap[lemmaName[0]?.toUpperCase()] || lemmaName[0]?.toUpperCase();
+        const ldata = await loadJSON(`${currentTab}/${lb}.json`);
+        if (ldata && ldata[lemmaName] && ldata[lemmaName][r.form]) {
+          const [contexts, total] = ldata[lemmaName][r.form];
+          html += `<div style="margin:0.5rem 0 0.5rem 1rem;">
+            <b style="color:var(--accent)">${esc(lemmaName)}:</b>`;
+          for (const ctx of contexts.slice(0, 5)) {
+            const [left, token, right, page] = ctx;
+            html += `<div class="ctx-line">
+              <span class="ctx-page">s.${page}</span>
+              <span class="ctx-left">${esc(left.split(/\s+/).slice(-ctxWindow).join(' '))}</span>
+              <span class="ctx-token">${esc(token)}</span>
+              <span class="ctx-right">${esc(right.split(/\s+/).slice(0, ctxWindow).join(' '))}</span>
+            </div>`;
+          }
+          if (total > 5) html += `<div class="ctx-line" style="color:var(--muted);font-style:italic;">... ve ${total-5} kullanım daha</div>`;
+          html += '</div>';
+        }
+      }
+      html += '</div>';
+    } else if (r.type === 'lemma_exact' || r.type === 'lemma_partial') {
+      const tag = r.type === 'lemma_exact' ? '' : ' (kısmi eşleşme)';
+      const forms = r.forms;
+      const formKeys = Object.keys(forms).sort();
+      html += `<div class="lemma-group">
+        <div class="lemma-header open">
+          <span class="arrow" style="transform:rotate(90deg)">▶</span>
+          <span class="lemma-name">${esc(r.lemma)}${tag}</span>
+        </div>
+        <div class="lemma-body open">`;
+      for (const form of formKeys) {
+        const [contexts, total] = forms[form];
+        html += `<div class="form-group">
+          <div class="form-header open">
+            <span class="arrow" style="transform:rotate(90deg)">▶</span>
+            <span class="form-name">${esc(form)}</span>
+            <span class="form-count">${total}×</span>
+          </div>
+          <div class="form-body open">`;
+        for (const ctx of contexts) {
+          const [left, token, right, page] = ctx;
+          html += `<div class="ctx-line">
+            <span class="ctx-page">s.${page}</span>
+            <span class="ctx-left">${esc(left.split(/\s+/).slice(-ctxWindow).join(' '))}</span>
+            <span class="ctx-token">${esc(token)}</span>
+            <span class="ctx-right">${esc(right.split(/\s+/).slice(0, ctxWindow).join(' '))}</span>
+          </div>`;
+        }
+        if (total > contexts.length) {
+          html += `<div class="ctx-line" style="color:var(--muted);font-style:italic;">... ve ${total - contexts.length} kullanım daha</div>`;
+        }
+        html += '</div></div>';
+      }
+      html += '</div></div>';
+    }
+  }
+  
+  content.innerHTML = html;
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+  cache = {}; // Farklı tab, cache temizle
+  buildLetterNav();
+  loadLetter(currentLetter);
+}
+
+function esc(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ctxRange değişince mevcut sayfayı yeniden render et
+document.getElementById('ctxRange').addEventListener('change', () => loadLetter(currentLetter));
+
+init();
+</script>
+</body>
+</html>
